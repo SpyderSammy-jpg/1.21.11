@@ -1,3 +1,4 @@
+
 name: Build MAGMA SMP WASM-GC Client
 
 on:
@@ -16,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
@@ -24,10 +25,28 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6
 
+      - name: Discover available build tasks
+        run: |
+          bash ./gradlew tasks --all --no-daemon | tee gradle-tasks.txt
+          echo ""
+          echo "===== WASM / CLIENT / BUNDLE TASKS ====="
+          grep -i -E 'wasm|bundle|client|javascript' gradle-tasks.txt || true
+
       - name: Build WASM-GC client
-        run: bash ./gradlew makeMainWasmClientBundle --no-daemon
+        run: |
+          TASK=$(grep -i -E 'makeMainWasmClientBundle|wasm.*bundle|bundle.*wasm' gradle-tasks.txt | head -n 1 | awk '{print $1}')
+
+          if [ -z "$TASK" ]; then
+            echo "No matching WASM bundle task was found."
+            echo "Check the Discover available build tasks step."
+            exit 1
+          fi
+
+          echo "Running Gradle task: $TASK"
+          bash ./gradlew "$TASK" --no-daemon
 
       - name: Upload browser build
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: MAGMA-SMP-WASM-GC
