@@ -1,57 +1,141 @@
+
 <!DOCTYPE html>
-<html style="width:100%;height:100%;background-color:black;">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
-		<meta name="description" content="Play minecraft 1.8 in your browser" />
-		<meta name="keywords" content="eaglercraft, eaglercraftx, minecraft, 1.8, 1.8.8" />
-		<title>EaglercraftX 1.8 WASM-GC</title>
-		<meta property="og:locale" content="en-US" />
-		<meta property="og:type" content="website" />
-		<meta property="og:title" content="EaglercraftX 1.8 WASM-GC" />
-		<meta property="og:description" content="Play minecraft 1.8 in your browser" />
-		<meta property="og:image" content="favicon.png" />
-		<link type="image/png" rel="shortcut icon" href="favicon.png" />
-		<script type="text/javascript" src="bootstrap.js"></script>
-		<script type="text/javascript">
-			"use strict";
-			window.addEventListener("load", function() {
-				if(window.location.href.indexOf("file:") === 0) {
-					alert("HTTP please, do not open this file locally, run a local HTTP server and load it via HTTP");
-				}else {
-					
-					// %%%%%%%%% launch options %%%%%%%%%%%%
-					
-					var relayId = Math.floor(Math.random() * 3);
-					window.eaglercraftXOpts = {
-						demoMode: false,
-						container: "game_frame",
-						assetsURI: "assets.epw",
-						worldsDB: "worlds",
-						servers: [
-							/* example: { addr: "ws://localhost:8081/", name: "Local test server" } */
-						],
-						relays: [
-							{ addr: "wss://relay.deev.is/", comment: "lax1dude relay #1", primary: relayId == 0 },
-							{ addr: "wss://relay.lax1dude.net/", comment: "lax1dude relay #2", primary: relayId == 1 },
-							{ addr: "wss://relay.shhnowisnottheti.me/", comment: "ayunami relay #1", primary: relayId == 2 }
-						]
-					};
-					
-					// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-					
-					var q = window.location.search;
-					if((typeof q === "string") && q[0] === "?" && (typeof window.URLSearchParams !== "undefined")) {
-						q = new window.URLSearchParams(q);
-						var s = q.get("server");
-						if(s) window.eaglercraftXOpts.joinServer = s;
-					}
-					
-					main();
-					
-				}
-			});
-		</script>
-	</head>
-	<body style="margin:0px;width:100%;height:100%;overflow:hidden;background-color:black;" id="game_frame"></body>
+<html lang="en" style="width:100%;height:100%;background:#080301;">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <meta name="description" content="Enter MAGMA SMP, a Minecraft 1.21.11 adventure." />
+    <meta name="keywords" content="MAGMA SMP, Minecraft, 1.21.11, Eaglercraft" />
+
+    <title>MAGMA SMP | Minecraft 1.21.11</title>
+
+    <meta property="og:locale" content="en-US" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MAGMA SMP" />
+    <meta property="og:description" content="Enter the world of MAGMA SMP." />
+    <meta property="og:image" content="favicon.png" />
+
+    <link type="image/png" rel="shortcut icon" href="favicon.png" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+            background: #080301;
+            background-image:
+                radial-gradient(ellipse at 15% 85%, rgba(255, 55, 0, 0.24), transparent 45%),
+                radial-gradient(ellipse at 85% 15%, rgba(255, 120, 0, 0.16), transparent 45%),
+                linear-gradient(135deg, #080301, #1b0802, #080301, #260900);
+            background-size: 250% 250%;
+            animation: magmaBackground 16s ease-in-out infinite;
+        }
+
+        body {
+            position: relative;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        @keyframes magmaBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                animation: none;
+            }
+        }
+    </style>
+
+    <!-- Original Minecraft WASM-GC loader -->
+    <script type="text/javascript" src="bootstrap.js"></script>
+
+    <script type="text/javascript">
+        "use strict";
+
+        window.addEventListener("load", function() {
+
+            if (window.location.href.indexOf("file:") === 0) {
+                alert("HTTP please, do not open this file locally, run a local HTTP server and load it via HTTP");
+            } else {
+
+                // MAGMA SMP launch options
+
+                var relayId = Math.floor(Math.random() * 3);
+
+                window.eaglercraftXOpts = {
+                    demoMode: false,
+                    container: "game_frame",
+                    assetsURI: "assets.epw",
+                    worldsDB: "worlds",
+
+                    // MAGMA SMP server
+                    servers: [
+                        {
+                            addr: "wss://play-magmasmp.eagler.host",
+                            name: "MAGMA SMP"
+                        }
+                    ],
+
+                    // Original Eaglercraft relay configuration
+                    relays: [
+                        {
+                            addr: "wss://relay.deev.is/",
+                            comment: "lax1dude relay #1",
+                            primary: relayId == 0
+                        },
+                        {
+                            addr: "wss://relay.lax1dude.net/",
+                            comment: "lax1dude relay #2",
+                            primary: relayId == 1
+                        },
+                        {
+                            addr: "wss://relay.shhnowisnottheti.me/",
+                            comment: "ayunami relay #1",
+                            primary: relayId == 2
+                        }
+                    ]
+                };
+
+                // Allow joining through ?server=SERVER_ADDRESS
+                var q = window.location.search;
+
+                if (
+                    (typeof q === "string") &&
+                    q[0] === "?" &&
+                    (typeof window.URLSearchParams !== "undefined")
+                ) {
+                    q = new window.URLSearchParams(q);
+
+                    var s = q.get("server");
+
+                    if (s) {
+                        window.eaglercraftXOpts.joinServer = s;
+                    }
+                }
+
+                // Start the original Minecraft loader
+                main();
+            }
+        });
+    </script>
+</head>
+
+<body id="game_frame"></body>
 </html>
